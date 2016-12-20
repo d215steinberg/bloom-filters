@@ -8,10 +8,6 @@ describe('Bloom Filters', function() {
 		sinon.stub(hasher, 'getHash').withArgs('foo').returns(17);
 	});
 
-	it('should look up a word', function() {
-		expect(bloomFilters.lookup).to.be.a('function');
-	});
-
 	it('should recognize a word whose single hash is a hit', function() {
 		bloomFilters.setBit(17);
 		expect(bloomFilters.lookup('foo')).to.be.truthy;
