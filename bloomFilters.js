@@ -1,3 +1,7 @@
-module.exports.lookup = function() {
+(function () {
+	module.exports.lookup = function () {
+	};
 
-};
+	module.exports.setBit = function () {
+	};
+})();
