@@ -14,10 +14,10 @@ describe('Bloom Filters', function() {
 
 	it('should recognize a word whose single hash is a hit', function() {
 		bloomFilters.setBit(17);
-		expect(bloomFilters.lookup('foo')).to.be.true;
+		expect(bloomFilters.lookup('foo')).to.be.truthy;
 	});
 
 	it('should not recognize a word whose single hash is a miss', function() {
-		expect(bloomFilters.lookup('foo')).to.be.false;
+		expect(bloomFilters.lookup('foo')).to.be.falsy;
 	});
 });
