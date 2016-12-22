@@ -30,6 +30,15 @@ describe('Bloom Filters', function () {
 	});
 
 	beforeEach(function () {
+		hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
+		hasher.getHash.withArgs('bar', 1).returns(BAR_HASH_1);
+		hasher.getHash.withArgs('baz', 1).returns(BAZ_HASH_1);
+		hasher.getHash.withArgs('foo', 2).returns(FOO_HASH_2);
+		hasher.getHash.withArgs('bar', 2).returns(BAR_HASH_2);
+		hasher.getHash.withArgs('baz', 2).returns(BAZ_HASH_2);
+		hasher.getHash.withArgs('foo', 3).returns(FOO_HASH_3);
+		hasher.getHash.withArgs('bar', 3).returns(BAR_HASH_3);
+		hasher.getHash.withArgs('baz', 3).returns(BAZ_HASH_3);
 		bitArray.clear();
 	});
 
@@ -37,9 +46,6 @@ describe('Bloom Filters', function () {
 		describe('Single hash function', function () {
 			it('should set hash for each word', function (done) {
 				hasher.NUM_HASHES = 1;
-				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
-				hasher.getHash.withArgs('bar', 1).returns(BAR_HASH_1);
-				hasher.getHash.withArgs('baz', 1).returns(BAZ_HASH_1);
 
 				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
 					.then(function () {
@@ -57,15 +63,6 @@ describe('Bloom Filters', function () {
 		describe('Multiple hash functions', function () {
 			it('should set all hashes for each word', function (done) {
 				hasher.NUM_HASHES = 3;
-				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
-				hasher.getHash.withArgs('bar', 1).returns(BAR_HASH_1);
-				hasher.getHash.withArgs('baz', 1).returns(BAZ_HASH_1);
-				hasher.getHash.withArgs('foo', 2).returns(FOO_HASH_2);
-				hasher.getHash.withArgs('bar', 2).returns(BAR_HASH_2);
-				hasher.getHash.withArgs('baz', 2).returns(BAZ_HASH_2);
-				hasher.getHash.withArgs('foo', 3).returns(FOO_HASH_3);
-				hasher.getHash.withArgs('bar', 3).returns(BAR_HASH_3);
-				hasher.getHash.withArgs('baz', 3).returns(BAZ_HASH_3);
 
 				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
 					.then(function () {
@@ -108,9 +105,6 @@ describe('Bloom Filters', function () {
 			beforeEach(function () {
 
 				hasher.NUM_HASHES = 3;
-				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
-				hasher.getHash.withArgs('foo', 2).returns(FOO_HASH_2);
-				hasher.getHash.withArgs('foo', 3).returns(FOO_HASH_3);
 			});
 
 			it('should not recognize a word for which one of multiple hashes is a miss', function () {
