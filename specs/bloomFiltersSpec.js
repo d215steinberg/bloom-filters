@@ -27,6 +27,7 @@ describe('Bloom Filters', function () {
 	describe('Loading bit array from dictionary', function () {
 		describe('Single hash function', function () {
 			it('should set hash for each word', function (done) {
+				hasher.NUM_HASHES = 1;
 				hasher.getHash.withArgs('foo', 1).returns(15);
 				hasher.getHash.withArgs('bar', 1).returns(17);
 				hasher.getHash.withArgs('baz', 1).returns(19);

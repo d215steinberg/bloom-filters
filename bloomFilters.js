@@ -15,7 +15,9 @@
 			.then(function(data) {
 				var words = _s.words(data, '\\n');
 				_.each(words, function(word) {
-					bitArray.setBit(hasher.getHash(word, 1));
+					for (var hashNum = 1; hashNum <= hasher.NUM_HASHES; hashNum++) {
+						bitArray.setBit(hasher.getHash(word, hashNum));
+					}
 				});
 			})
 			.catch(function(error) {
