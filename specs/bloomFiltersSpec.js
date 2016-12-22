@@ -91,11 +91,11 @@ describe('Bloom Filters', function () {
 		describe('Single hash function', function () {
 			beforeEach(function () {
 				hasher.NUM_HASHES = 1;
-				hasher.getHash.withArgs('foo', 1).returns(17);
+				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
 			});
 
 			it('should recognize a word whose single hash is a hit', function () {
-				bitArray.setBit(17);
+				bitArray.setBit(FOO_HASH_1);
 				expect(bloomFilters.lookup('foo')).to.be.true;
 			});
 
@@ -106,23 +106,29 @@ describe('Bloom Filters', function () {
 
 		describe('Multiple hash functions', function () {
 			beforeEach(function () {
+
 				hasher.NUM_HASHES = 3;
-				hasher.getHash.withArgs('foo', 1).returns(15);
-				hasher.getHash.withArgs('foo', 2).returns(17);
-				hasher.getHash.withArgs('foo', 3).returns(19);
+				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
+				hasher.getHash.withArgs('foo', 2).returns(FOO_HASH_2);
+				hasher.getHash.withArgs('foo', 3).returns(FOO_HASH_3);
 			});
 
 			it('should not recognize a word for which one of multiple hashes is a miss', function () {
-				bitArray.setBit(15);
-				bitArray.setBit(19);
+				var MISS_HASH = 42;
 
-				expect(bloomFilters.lookup('foo')).to.be.false;
+				hasher.getHash.withArgs('nearMiss', 1).returns(FOO_HASH_3);
+				hasher.getHash.withArgs('nearMiss', 2).returns(MISS_HASH);
+				hasher.getHash.withArgs('nearMiss', 3).returns(BAR_HASH_2);
+				bitArray.setBit(FOO_HASH_3);
+				bitArray.setBit(BAR_HASH_2);
+
+				expect(bloomFilters.lookup('nearMiss')).to.be.false;
 			});
 
 			it('should recognize a word for which all of multiple hashes are hits', function () {
-				bitArray.setBit(15);
-				bitArray.setBit(17);
-				bitArray.setBit(19);
+				bitArray.setBit(FOO_HASH_1);
+				bitArray.setBit(FOO_HASH_2);
+				bitArray.setBit(FOO_HASH_3);
 
 				expect(bloomFilters.lookup('foo')).to.be.true;
 			});
