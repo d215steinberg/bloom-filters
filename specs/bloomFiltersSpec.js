@@ -36,6 +36,7 @@ describe('Bloom Filters', function () {
 	}
 
 	beforeEach(function () {
+		hasher.NUM_HASHES = 3;
 		defineHashValues('foo', FOO_HASH_1, FOO_HASH_2, FOO_HASH_3);
 		defineHashValues('bar', BAR_HASH_1, BAR_HASH_2, BAR_HASH_3);
 		defineHashValues('baz', BAZ_HASH_1, BAZ_HASH_2, BAZ_HASH_3);
@@ -43,33 +44,30 @@ describe('Bloom Filters', function () {
 
 	describe('Loading bit array from dictionary', function () {
 		var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
-
-		describe('Multiple hash functions', function () {
-			it('should set all hashes for each word', function (done) {
-				hasher.NUM_HASHES = 3;
-
-				bloomFilters.loadDictionary(WORD_LIST_URL)
-					.then(function () {
-						expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
-						expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
-						expect(bitArray.getBit(BAZ_HASH_1)).to.equal(1);
-						expect(bitArray.getBit(FOO_HASH_2)).to.equal(1);
-						expect(bitArray.getBit(BAR_HASH_2)).to.equal(1);
-						expect(bitArray.getBit(BAZ_HASH_2)).to.equal(1);
-						expect(bitArray.getBit(FOO_HASH_3)).to.equal(1);
-						expect(bitArray.getBit(BAR_HASH_3)).to.equal(1);
-						expect(bitArray.getBit(BAZ_HASH_3)).to.equal(1);
-						done();
-					})
-					.catch(function (err) {
-						done(err);
-					});
-			});
-		})
+		it('should set all hashes for each word', function (done) {
+			bloomFilters.loadDictionary(WORD_LIST_URL)
+				.then(function () {
+					expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
+					expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
+					expect(bitArray.getBit(BAZ_HASH_1)).to.equal(1);
+					expect(bitArray.getBit(FOO_HASH_2)).to.equal(1);
+					expect(bitArray.getBit(BAR_HASH_2)).to.equal(1);
+					expect(bitArray.getBit(BAZ_HASH_2)).to.equal(1);
+					expect(bitArray.getBit(FOO_HASH_3)).to.equal(1);
+					expect(bitArray.getBit(BAR_HASH_3)).to.equal(1);
+					expect(bitArray.getBit(BAZ_HASH_3)).to.equal(1);
+					done();
+				})
+				.catch(function (err) {
+					done(err);
+				});
+		});
 	});
 
 	describe('Looking up word', function () {
 		beforeEach(function () {
+			var MISS_HASH = 42;
+			defineHashValues('nearMiss', FOO_HASH_3, MISS_HASH, BAR_HASH_2);
 			bitArray.setBit(FOO_HASH_1);
 			bitArray.setBit(FOO_HASH_2);
 			bitArray.setBit(FOO_HASH_3);
@@ -81,23 +79,14 @@ describe('Bloom Filters', function () {
 			bitArray.setBit(BAZ_HASH_3);
 		});
 
-		describe('Multiple hash functions', function () {
-			beforeEach(function () {
-				hasher.NUM_HASHES = 3;
-			});
+		it('should not recognize a word for which one of multiple hashes is a miss', function () {
+			expect(bloomFilters.lookup('nearMiss')).to.be.false;
+		});
 
-			it('should not recognize a word for which one of multiple hashes is a miss', function () {
-				var MISS_HASH = 42;
-				defineHashValues('nearMiss', FOO_HASH_3, MISS_HASH, BAR_HASH_2);
-
-				expect(bloomFilters.lookup('nearMiss')).to.be.false;
-			});
-
-			it('should recognize a word for which all of multiple hashes are hits', function () {
-				expect(bloomFilters.lookup('foo')).to.be.true;
-				expect(bloomFilters.lookup('bar')).to.be.true;
-				expect(bloomFilters.lookup('baz')).to.be.true;
-			});
+		it('should recognize a word for which all hashes are hits', function () {
+			expect(bloomFilters.lookup('foo')).to.be.true;
+			expect(bloomFilters.lookup('bar')).to.be.true;
+			expect(bloomFilters.lookup('baz')).to.be.true;
 		});
 	});
 });
