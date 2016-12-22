@@ -44,23 +44,6 @@ describe('Bloom Filters', function () {
 	describe('Loading bit array from dictionary', function () {
 		var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
 
-		describe('Single hash function', function () {
-			it('should set hash for each word', function (done) {
-				hasher.NUM_HASHES = 1;
-
-				bloomFilters.loadDictionary(WORD_LIST_URL)
-					.then(function () {
-						expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
-						expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
-						expect(bitArray.getBit(BAZ_HASH_1)).to.equal(1);
-						done();
-					})
-					.catch(function (err) {
-						done(err);
-					});
-			});
-		});
-
 		describe('Multiple hash functions', function () {
 			it('should set all hashes for each word', function (done) {
 				hasher.NUM_HASHES = 3;
@@ -96,23 +79,6 @@ describe('Bloom Filters', function () {
 			bitArray.setBit(BAZ_HASH_1);
 			bitArray.setBit(BAZ_HASH_2);
 			bitArray.setBit(BAZ_HASH_3);
-		});
-
-		describe('Single hash function', function () {
-			beforeEach(function () {
-				hasher.NUM_HASHES = 1;
-				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
-			});
-
-			it('should recognize a word whose single hash is a hit', function () {
-				expect(bloomFilters.lookup('foo')).to.be.true;
-			});
-
-			it('should not recognize a word whose single hash is a miss', function () {
-				var MISS_HASH = 54;
-				defineHashValues('miss', MISS_HASH);
-				expect(bloomFilters.lookup('miss')).to.be.false;
-			});
 		});
 
 		describe('Multiple hash functions', function () {
