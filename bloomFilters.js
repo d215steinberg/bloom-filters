@@ -1,13 +1,13 @@
 (function () {
-	var BitSet = require('bitset.js');
+	var BitArray = require('./bitArray');
 	var hasher = require('./hasher');
-	var bitSet = new BitSet;
+	var bitArray = new BitArray;
 
 	module.exports.lookup = function (word) {
-		return bitSet.get(hasher.getHash(word));
+		return bitArray.getBit(hasher.getHash(word));
 	};
 
 	module.exports.setBit = function (bitNum) {
-		bitSet.set(bitNum);
+		bitArray.set(bitNum);
 	};
 })();

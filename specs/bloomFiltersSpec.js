@@ -1,6 +1,7 @@
 describe('Bloom Filters', function() {
 	var expect = require('chai').expect;
 	var bloomFilters = require('../bloomFilters');
+	var BitArray = require('../bitArray');
 	var sinon = require('sinon');
 	var hasher = require('../hasher');
 
@@ -9,7 +10,8 @@ describe('Bloom Filters', function() {
 	});
 
 	it('should recognize a word whose single hash is a hit', function() {
-		bloomFilters.setBit(17);
+		var bitArray = new BitArray;
+		bitArray.setBit(17);
 		expect(bloomFilters.lookup('foo')).to.be.truthy;
 	});
 
