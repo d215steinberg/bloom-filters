@@ -6,8 +6,10 @@
 	var hasher = require('./hasher');
 	var q = require('q');
 
-	function isHashAMiss(word, hashNum) {
-		return bitArray.getBit(hasher.getHash(word, hashNum)) != 1;
+	function setBitForAllHashes(word) {
+		for (var hashNum = 1; hashNum <= hasher.NUM_HASHES; hashNum++) {
+			bitArray.setBit(hasher.getHash(word, hashNum));
+		}
 	}
 
 	module.exports.loadDictionary = function(dictionarySource) {
@@ -15,15 +17,17 @@
 			.then(function(data) {
 				var words = _s.words(data, '\\n');
 				_.each(words, function(word) {
-					for (var hashNum = 1; hashNum <= hasher.NUM_HASHES; hashNum++) {
-						bitArray.setBit(hasher.getHash(word, hashNum));
-					}
+					setBitForAllHashes(word);
 				});
 			})
 			.catch(function(error) {
 				return q.reject(error);
 			});
 	};
+
+	function isHashAMiss(word, hashNum) {
+		return bitArray.getBit(hasher.getHash(word, hashNum)) != 1;
+	}
 
 	module.exports.lookup = function (word) {
 		for (var hashNum = 1; hashNum <= hasher.NUM_HASHES; hashNum++) {
