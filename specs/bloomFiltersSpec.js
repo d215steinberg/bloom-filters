@@ -29,16 +29,17 @@ describe('Bloom Filters', function () {
 		bloomFilters = require('../bloomFilters');
 	});
 
+	function defineHashValues(word, hashValue1, hashValue2, hashValue3) {
+		hasher.getHash.withArgs(word, 1).returns(hashValue1);
+		hasher.getHash.withArgs(word, 2).returns(hashValue2);
+		hasher.getHash.withArgs(word, 3).returns(hashValue3);
+	}
+
 	beforeEach(function () {
-		hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
-		hasher.getHash.withArgs('bar', 1).returns(BAR_HASH_1);
-		hasher.getHash.withArgs('baz', 1).returns(BAZ_HASH_1);
-		hasher.getHash.withArgs('foo', 2).returns(FOO_HASH_2);
-		hasher.getHash.withArgs('bar', 2).returns(BAR_HASH_2);
-		hasher.getHash.withArgs('baz', 2).returns(BAZ_HASH_2);
-		hasher.getHash.withArgs('foo', 3).returns(FOO_HASH_3);
-		hasher.getHash.withArgs('bar', 3).returns(BAR_HASH_3);
-		hasher.getHash.withArgs('baz', 3).returns(BAZ_HASH_3);
+		defineHashValues('foo', FOO_HASH_1, FOO_HASH_2, FOO_HASH_3);
+		defineHashValues('bar', BAR_HASH_1, BAR_HASH_2, BAR_HASH_3);
+		defineHashValues('baz', BAZ_HASH_1, BAZ_HASH_2, BAZ_HASH_3);
+
 		bitArray.clear();
 	});
 
@@ -109,10 +110,7 @@ describe('Bloom Filters', function () {
 
 			it('should not recognize a word for which one of multiple hashes is a miss', function () {
 				var MISS_HASH = 42;
-
-				hasher.getHash.withArgs('nearMiss', 1).returns(FOO_HASH_3);
-				hasher.getHash.withArgs('nearMiss', 2).returns(MISS_HASH);
-				hasher.getHash.withArgs('nearMiss', 3).returns(BAR_HASH_2);
+				defineHashValues('nearMiss', FOO_HASH_3, MISS_HASH, BAR_HASH_2);
 				bitArray.setBit(FOO_HASH_3);
 				bitArray.setBit(BAR_HASH_2);
 
