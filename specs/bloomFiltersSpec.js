@@ -44,11 +44,13 @@ describe('Bloom Filters', function () {
 	});
 
 	describe('Loading bit array from dictionary', function () {
+		var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
+
 		describe('Single hash function', function () {
 			it('should set hash for each word', function (done) {
 				hasher.NUM_HASHES = 1;
 
-				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
+				bloomFilters.loadDictionary(WORD_LIST_URL)
 					.then(function () {
 						expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
 						expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
@@ -65,7 +67,7 @@ describe('Bloom Filters', function () {
 			it('should set all hashes for each word', function (done) {
 				hasher.NUM_HASHES = 3;
 
-				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
+				bloomFilters.loadDictionary(WORD_LIST_URL)
 					.then(function () {
 						expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
 						expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
@@ -86,7 +88,7 @@ describe('Bloom Filters', function () {
 	});
 
 	describe('Looking up word', function () {
-		beforeEach(function() {
+		beforeEach(function () {
 			bitArray.setBit(FOO_HASH_1);
 			bitArray.setBit(FOO_HASH_2);
 			bitArray.setBit(FOO_HASH_3);
