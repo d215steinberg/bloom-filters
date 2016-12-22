@@ -39,8 +39,6 @@ describe('Bloom Filters', function () {
 		defineHashValues('foo', FOO_HASH_1, FOO_HASH_2, FOO_HASH_3);
 		defineHashValues('bar', BAR_HASH_1, BAR_HASH_2, BAR_HASH_3);
 		defineHashValues('baz', BAZ_HASH_1, BAZ_HASH_2, BAZ_HASH_3);
-
-		bitArray.clear();
 	});
 
 	describe('Loading bit array from dictionary', function () {
