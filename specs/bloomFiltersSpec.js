@@ -23,7 +23,7 @@ describe('Bloom Filters', function () {
 		mockery.enable();
 		mockery.warnOnUnregistered(false);
 		mockery.registerMock('request-promise', function () {
-			return q('foo\\nbar\\nbaz');
+			return q('foo\nbar\nbaz');
 		});
 		rp = require('request-promise');
 		bloomFilters = require('../bloomFilters');

@@ -15,7 +15,7 @@
 	module.exports.loadDictionary = function(dictionarySource) {
 		return rp(dictionarySource)
 			.then(function(data) {
-				var words = _s.words(data, '\\n');
+				var words = _s.words(data);
 				_.each(words, function(word) {
 					setBitForAllHashes(word);
 				});
