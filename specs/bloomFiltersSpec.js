@@ -3,10 +3,19 @@ describe('Bloom Filters', function () {
 	var sinon = require('sinon');
 	var mockery = require('mockery');
 	var q = require('q');
-	var rp;
-	var bloomFilters;
 	var bitArray = require('../bitArray');
 	var hasher = require('../hasher');
+	var rp;
+	var bloomFilters;
+	var FOO_HASH_1 = 15;
+	var FOO_HASH_2 = 25;
+	var FOO_HASH_3 = 35;
+	var BAR_HASH_1 = 17;
+	var BAR_HASH_2 = 27;
+	var BAR_HASH_3 = 37;
+	var BAZ_HASH_1 = 19;
+	var BAZ_HASH_2 = 29;
+	var BAZ_HASH_3 = 39;
 
 	before(function () {
 		sinon.stub(hasher, 'getHash');
@@ -28,15 +37,15 @@ describe('Bloom Filters', function () {
 		describe('Single hash function', function () {
 			it('should set hash for each word', function (done) {
 				hasher.NUM_HASHES = 1;
-				hasher.getHash.withArgs('foo', 1).returns(15);
-				hasher.getHash.withArgs('bar', 1).returns(17);
-				hasher.getHash.withArgs('baz', 1).returns(19);
+				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
+				hasher.getHash.withArgs('bar', 1).returns(BAR_HASH_1);
+				hasher.getHash.withArgs('baz', 1).returns(BAZ_HASH_1);
 
 				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
 					.then(function () {
-						expect(bitArray.getBit(15)).to.equal(1);
-						expect(bitArray.getBit(17)).to.equal(1);
-						expect(bitArray.getBit(19)).to.equal(1);
+						expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
+						expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
+						expect(bitArray.getBit(BAZ_HASH_1)).to.equal(1);
 						done();
 					})
 					.catch(function (err) {
@@ -45,30 +54,30 @@ describe('Bloom Filters', function () {
 			});
 		});
 
-		describe('Multiple hash functions', function() {
-			it('should set all hashes for each word', function(done) {
+		describe('Multiple hash functions', function () {
+			it('should set all hashes for each word', function (done) {
 				hasher.NUM_HASHES = 3;
-				hasher.getHash.withArgs('foo', 1).returns(15);
-				hasher.getHash.withArgs('bar', 1).returns(17);
-				hasher.getHash.withArgs('baz', 1).returns(19);
-				hasher.getHash.withArgs('foo', 2).returns(25);
-				hasher.getHash.withArgs('bar', 2).returns(27);
-				hasher.getHash.withArgs('baz', 2).returns(29);
-				hasher.getHash.withArgs('foo', 3).returns(35);
-				hasher.getHash.withArgs('bar', 3).returns(37);
-				hasher.getHash.withArgs('baz', 3).returns(39);
+				hasher.getHash.withArgs('foo', 1).returns(FOO_HASH_1);
+				hasher.getHash.withArgs('bar', 1).returns(BAR_HASH_1);
+				hasher.getHash.withArgs('baz', 1).returns(BAZ_HASH_1);
+				hasher.getHash.withArgs('foo', 2).returns(FOO_HASH_2);
+				hasher.getHash.withArgs('bar', 2).returns(BAR_HASH_2);
+				hasher.getHash.withArgs('baz', 2).returns(BAZ_HASH_2);
+				hasher.getHash.withArgs('foo', 3).returns(FOO_HASH_3);
+				hasher.getHash.withArgs('bar', 3).returns(BAR_HASH_3);
+				hasher.getHash.withArgs('baz', 3).returns(BAZ_HASH_3);
 
 				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
 					.then(function () {
-						expect(bitArray.getBit(15)).to.equal(1);
-						expect(bitArray.getBit(17)).to.equal(1);
-						expect(bitArray.getBit(19)).to.equal(1);
-						expect(bitArray.getBit(25)).to.equal(1);
-						expect(bitArray.getBit(27)).to.equal(1);
-						expect(bitArray.getBit(29)).to.equal(1);
-						expect(bitArray.getBit(35)).to.equal(1);
-						expect(bitArray.getBit(37)).to.equal(1);
-						expect(bitArray.getBit(39)).to.equal(1);
+						expect(bitArray.getBit(FOO_HASH_1)).to.equal(1);
+						expect(bitArray.getBit(BAR_HASH_1)).to.equal(1);
+						expect(bitArray.getBit(BAZ_HASH_1)).to.equal(1);
+						expect(bitArray.getBit(FOO_HASH_2)).to.equal(1);
+						expect(bitArray.getBit(BAR_HASH_2)).to.equal(1);
+						expect(bitArray.getBit(BAZ_HASH_2)).to.equal(1);
+						expect(bitArray.getBit(FOO_HASH_3)).to.equal(1);
+						expect(bitArray.getBit(BAR_HASH_3)).to.equal(1);
+						expect(bitArray.getBit(BAZ_HASH_3)).to.equal(1);
 						done();
 					})
 					.catch(function (err) {
