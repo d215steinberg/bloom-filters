@@ -43,6 +43,38 @@ describe('Bloom Filters', function () {
 					});
 			});
 		});
+
+		describe('Multiple hash functions', function() {
+			it('should set all hashes for each word', function(done) {
+				hasher.NUM_HASHES = 3;
+				hasher.getHash.withArgs('foo', 1).returns(15);
+				hasher.getHash.withArgs('bar', 1).returns(17);
+				hasher.getHash.withArgs('baz', 1).returns(19);
+				hasher.getHash.withArgs('foo', 2).returns(25);
+				hasher.getHash.withArgs('bar', 2).returns(27);
+				hasher.getHash.withArgs('baz', 2).returns(29);
+				hasher.getHash.withArgs('foo', 3).returns(35);
+				hasher.getHash.withArgs('bar', 3).returns(37);
+				hasher.getHash.withArgs('baz', 3).returns(39);
+
+				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
+					.then(function () {
+						expect(bitArray.getBit(15)).to.equal(1);
+						expect(bitArray.getBit(17)).to.equal(1);
+						expect(bitArray.getBit(19)).to.equal(1);
+						expect(bitArray.getBit(25)).to.equal(1);
+						expect(bitArray.getBit(27)).to.equal(1);
+						expect(bitArray.getBit(29)).to.equal(1);
+						expect(bitArray.getBit(35)).to.equal(1);
+						expect(bitArray.getBit(37)).to.equal(1);
+						expect(bitArray.getBit(39)).to.equal(1);
+						done();
+					})
+					.catch(function (err) {
+						done(err);
+					});
+			});
+		})
 	});
 
 	describe('Looking up word', function () {
