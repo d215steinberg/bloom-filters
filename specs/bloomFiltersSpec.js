@@ -1,32 +1,45 @@
 describe('Bloom Filters', function () {
 	var expect = require('chai').expect;
 	var sinon = require('sinon');
-	var rp = require('request-promise');
+	var mockery = require('mockery');
 	var q = require('q');
-	var bloomFilters = require('../bloomFilters');
+	var rp;
+	var bloomFilters;
 	var bitArray = require('../bitArray');
 	var hasher = require('../hasher');
 
 	before(function () {
 		sinon.stub(hasher, 'getHash');
+
+		mockery.enable();
+		mockery.warnOnUnregistered(false);
+		mockery.registerMock('request-promise', function () {
+			return q('foo\\nbar\\nbaz');
+		});
+		rp = require('request-promise');
+		bloomFilters = require('../bloomFilters');
 	});
 
 	beforeEach(function () {
 		bitArray.clear();
 	});
 
-	describe('Loading bit array from dictionary', function() {
-		beforeEach(function() {
-			sinon.stub(rp, 'constructor').withArgs('http://codekata.com/data/wordlist.txt').returns(q('foo\\bar\\baz'));
-		});
+	describe('Loading bit array from dictionary', function () {
+		describe('Single hash function', function () {
+			it('should set hash for each word', function (done) {
+				hasher.getHash.withArgs('foo', 1).returns(15);
+				hasher.getHash.withArgs('bar', 1).returns(17);
+				hasher.getHash.withArgs('baz', 1).returns(19);
 
-		describe('Single hash function', function() {
-			it('should set hash for each word', function() {
 				bloomFilters.loadDictionary('http://codekata.com/data/wordlist.txt')
-					.then(function() {
+					.then(function () {
 						expect(bitArray.getBit(15)).to.equal(1);
 						expect(bitArray.getBit(17)).to.equal(1);
 						expect(bitArray.getBit(19)).to.equal(1);
+						done();
+					})
+					.catch(function (err) {
+						done(err);
 					});
 			});
 		});

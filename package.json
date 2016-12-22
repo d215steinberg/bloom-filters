@@ -2,11 +2,15 @@
   "name": "bloom-filters",
   "version": "0.0.1",
   "dependencies": {
-    "bitset.js": "4.0"
+    "bitset.js": "4.0",
+    "request-promise": "4.1",
+    "underscore": "1.8",
+    "underscore.string": "2.3"
   },
   "devDependencies": {
     "mocha": "3.2",
     "chai": "3.5",
-    "sinon-chai": "2.8"
+    "q": "1.4",
+    "mockery": "1.4"
   }
 }
