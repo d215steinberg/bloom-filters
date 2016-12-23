@@ -4,13 +4,10 @@ describe('Bloom Filters Integration', function () {
 	var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
 
 	before(function (done) {
-		this.timeout(20000);
+		this.timeout(60000);
 		bloomFilters.loadDictionary(WORD_LIST_URL)
 			.then(function () {
 				done();
-			})
-			.catch(function(error) {
-				console.log(error);
 			});
 	});
 

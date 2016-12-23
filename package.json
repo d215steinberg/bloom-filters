@@ -5,7 +5,8 @@
     "bitset.js": "4.0",
     "request-promise": "4.1",
     "underscore": "1.8",
-    "underscore.string": "2.3"
+    "underscore.string": "2.3",
+    "string-hash": "1.1"
   },
   "devDependencies": {
     "mocha": "3.2",
