@@ -5,22 +5,22 @@
 	};
 
 	var crypto = require('crypto');
-	var sha1Hash = function(word) {
-		var hash = crypto.createHash('sha1').update(word).digest("hex");
+	function getNumericHashFromCrypto(word, algorithm) {
+		var hash = crypto.createHash(algorithm).update(word).digest("hex");
 		var last7Digits = hash.substr(hash.length - 7);
 		return parseInt(last7Digits, 16);
+	}
+
+	var sha1Hash = function(word) {
+		return getNumericHashFromCrypto(word, 'sha1');
 	};
 
 	var md5Hash = function(word) {
-		var hash = crypto.createHash('md5').update(word).digest("hex");
-		var last7Digits = hash.substr(hash.length - 7);
-		return parseInt(last7Digits, 16);
+		return getNumericHashFromCrypto(word, 'md5');
 	};
 
 	var sha256Hash = function(word) {
-		var hash = crypto.createHash('sha256').update(word).digest("hex");
-		var last7Digits = hash.substr(hash.length - 7);
-		return parseInt(last7Digits, 16);
+		return getNumericHashFromCrypto(word, 'sha256');
 	};
 
 	var hashFunctions = [djb2ish, sha1Hash, md5Hash, sha256Hash];
