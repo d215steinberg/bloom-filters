@@ -23,15 +23,9 @@
 		return getNumericHashFromCrypto(word, 'sha256');
 	};
 
+	var javaHashAlgorithm = require('./javaHashAlgorithm');
 	var javaHash = function(word){
-		var hash = 0;
-		if (word.length == 0) return hash;
-		for (i = 0; i < word.length; i++) {
-			char = word.charCodeAt(i);
-			hash = ((hash<<5)-hash)+char;
-			hash = hash & hash; // Convert to 32bit integer
-		}
-		return Math.floor(Math.abs(hash) / 4);
+		return Math.floor(Math.abs(javaHashAlgorithm(word)) / 4);
 	};
 
 	var hashFunctions = [djb2ish, sha1Hash, md5Hash, sha256Hash, javaHash];
