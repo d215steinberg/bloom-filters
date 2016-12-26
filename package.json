@@ -6,8 +6,7 @@
     "request-promise": "4.1",
     "underscore": "1.8",
     "underscore.string": "2.3",
-    "string-hash": "1.1",
-    "node-sha1": "1.0"
+    "string-hash": "1.1"
   },
   "devDependencies": {
     "mocha": "3.2",
