@@ -1,6 +1,6 @@
 (function() {
 	var darkSkyAppStringHash = require('string-hash');
-	var djb2ish = function (word) {
+	var djb2ishHash = function (word) {
 		return Math.floor(darkSkyAppStringHash(word) / 8);
 	};
 
@@ -28,7 +28,7 @@
 		return Math.floor(Math.abs(javaHashAlgorithm(word)) / 4);
 	};
 
-	var hashFunctions = [djb2ish, sha1Hash, md5Hash, sha256Hash, javaHash];
+	var hashFunctions = [djb2ishHash, sha1Hash, md5Hash, sha256Hash, javaHash];
 
 	module.exports.NUM_HASHES = hashFunctions.length;
 
