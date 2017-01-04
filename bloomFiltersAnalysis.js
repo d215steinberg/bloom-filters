@@ -6,7 +6,7 @@
 	function logFalsePositive(word) {
 		if (bloomFilters.lookup(word)) {
 			if (!binaryDictionary.lookup(word)) {
-				console.log(word + '\n');
+				console.log("False positive: " + word + '\n');
 			}
 		}
 	}
