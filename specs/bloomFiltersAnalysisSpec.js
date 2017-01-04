@@ -24,31 +24,44 @@ describe('Bloom Filters Analysis', function () {
 
 	describe('Analyzing bloom filters', function () {
 		before(function() {
+			sinon.stub(randomWordGenerator, 'generate').returns('abcde');
+			sinon.stub(bloomFilters, 'lookup');
+			sinon.stub(binaryDictionary, 'lookup');
 			sinon.spy(console, 'log');
+		});
+
+		after(function() {
+			bloomFilters.lookup.restore();
 		});
 
 		afterEach(function() {
 			console.log.reset();
 		});
 
-		it('should log false positive', sinon.test(function () {
-			this.stub(randomWordGenerator, 'generate').returns('abcde');
-			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
-			this.stub(binaryDictionary, 'lookup').withArgs('abcde').returns(false);
+		it('should log false positive', function () {
+			bloomFilters.lookup.withArgs('abcde').returns(false);
+			binaryDictionary.lookup.withArgs('abcde').returns(false);
 
 			bloomFiltersAnalysis.analyze();
 
 			sinon.assert.calledWith(console.log, 'abcde');
-		}));
+		});
 
-		it('should not log true positive', sinon.test(function () {
-			this.stub(randomWordGenerator, 'generate').returns('abcde');
-			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
-			this.stub(binaryDictionary, 'lookup').withArgs('abcde').returns(true);
+		it('should not log true positive', function () {
+			bloomFilters.lookup.withArgs('abcde').returns(true);
+			binaryDictionary.lookup.withArgs('abcde').returns(true);
 
 			bloomFiltersAnalysis.analyze();
 
 			sinon.assert.neverCalledWith(console.log, 'abcde');
-		}));
+		});
+
+		it('should not log negative', function() {
+			bloomFilters.lookup.withArgs('abcde').returns(false);
+			binaryDictionary.lookup.withArgs('abcde').returns(false);
+
+			bloomFiltersAnalysis.analyze();
+			sinon.assert.neverCalledWith(console.log, 'abcde');
+		})
 	});
 });
