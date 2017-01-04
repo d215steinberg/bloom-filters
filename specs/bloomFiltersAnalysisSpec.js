@@ -39,7 +39,7 @@ describe('Bloom Filters Analysis', function () {
 		});
 
 		it('should log false positive', function () {
-			bloomFilters.lookup.withArgs('abcde').returns(false);
+			bloomFilters.lookup.withArgs('abcde').returns(true);
 			binaryDictionary.lookup.withArgs('abcde').returns(false);
 
 			bloomFiltersAnalysis.analyze();
@@ -61,7 +61,8 @@ describe('Bloom Filters Analysis', function () {
 			binaryDictionary.lookup.withArgs('abcde').returns(false);
 
 			bloomFiltersAnalysis.analyze();
+			
 			sinon.assert.neverCalledWith(console.log, 'abcde');
-		})
+		});
 	});
 });
