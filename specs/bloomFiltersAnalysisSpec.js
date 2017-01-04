@@ -23,15 +23,28 @@ describe('Bloom Filters Analysis', function () {
 	});
 
 	describe('Analyzing bloom filters', function () {
+		before(function() {
+			sinon.spy(console, 'log');
+		});
+
 		it('should log false positive', sinon.test(function () {
 			this.stub(randomWordGenerator, 'generate').returns('abcde');
 			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
 			this.stub(binaryDictionary, 'lookup').withArgs('abcde').returns(false);
-			sinon.spy(console, 'log');
 
 			bloomFiltersAnalysis.analyze();
 
 			sinon.assert.calledWith(console.log, 'abcde');
+		}));
+
+		it('should not log true positive', sinon.test(function () {
+			this.stub(randomWordGenerator, 'generate').returns('abcde');
+			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
+			this.stub(binaryDictionary, 'lookup').withArgs('abcde').returns(true);
+
+			bloomFiltersAnalysis.analyze();
+
+			sinon.assert.neverCalledWith(console.log, 'abcde');
 		}));
 	});
 });
