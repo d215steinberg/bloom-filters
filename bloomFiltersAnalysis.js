@@ -1,8 +1,11 @@
-(function() {
+(function () {
 	var randomWordGenerator = require('./randomWordGenerator');
+	var binaryDictionary = require('./binaryDictionary');
 
-	module.exports.analyze = function() {
+	module.exports.analyze = function () {
 		var word = randomWordGenerator.generate();
-		console.log(word);
+		if (!binaryDictionary.lookup(word)) {
+			console.log(word);
+		}
 	};
 })();

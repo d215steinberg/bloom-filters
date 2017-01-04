@@ -27,6 +27,10 @@ describe('Bloom Filters Analysis', function () {
 			sinon.spy(console, 'log');
 		});
 
+		afterEach(function() {
+			console.log.reset();
+		});
+
 		it('should log false positive', sinon.test(function () {
 			this.stub(randomWordGenerator, 'generate').returns('abcde');
 			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
