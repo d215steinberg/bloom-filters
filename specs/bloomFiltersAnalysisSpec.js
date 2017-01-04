@@ -18,51 +18,108 @@ describe('Bloom Filters Analysis', function () {
 		bloomFiltersAnalysis = require('../bloomFiltersAnalysis');
 	});
 
-	after(function() {
+	after(function () {
 		mockery.deregisterMock('request-promise');
 	});
 
 	describe('Analyzing bloom filters', function () {
-		before(function() {
-			sinon.stub(randomWordGenerator, 'generate').returns('abcde');
+		before(function () {
+			sinon.stub(randomWordGenerator, 'generate');
 			sinon.stub(bloomFilters, 'lookup');
 			sinon.stub(binaryDictionary, 'lookup');
 			sinon.spy(console, 'log');
 		});
 
-		after(function() {
+		after(function () {
 			bloomFilters.lookup.restore();
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			console.log.reset();
 		});
 
-		it('should log false positive', function () {
-			bloomFilters.lookup.withArgs('abcde').returns(true);
-			binaryDictionary.lookup.withArgs('abcde').returns(false);
+		describe('Single word', function () {
+			before(function () {
+				randomWordGenerator.generate.returns('abcde');
+			});
 
-			bloomFiltersAnalysis.analyze();
+			it('should log false positive', function () {
+				bloomFilters.lookup.withArgs('abcde').returns(true);
+				binaryDictionary.lookup.withArgs('abcde').returns(false);
 
-			sinon.assert.calledWith(console.log, 'abcde');
+				bloomFiltersAnalysis.analyze();
+
+				sinon.assert.calledWith(console.log, 'abcde');
+			});
+
+			it('should not log true positive', function () {
+				bloomFilters.lookup.withArgs('abcde').returns(true);
+				binaryDictionary.lookup.withArgs('abcde').returns(true);
+
+				bloomFiltersAnalysis.analyze();
+
+				sinon.assert.neverCalledWith(console.log, 'abcde');
+			});
+
+			it('should not log negative', function () {
+				bloomFilters.lookup.withArgs('abcde').returns(false);
+				binaryDictionary.lookup.withArgs('abcde').returns(false);
+
+				bloomFiltersAnalysis.analyze();
+
+				sinon.assert.neverCalledWith(console.log, 'abcde');
+			});
 		});
 
-		it('should not log true positive', function () {
-			bloomFilters.lookup.withArgs('abcde').returns(true);
-			binaryDictionary.lookup.withArgs('abcde').returns(true);
+		describe('Multiple words', function () {
+			var FALSE_POSITIVE_1 = 'abcde';
+			var FALSE_POSITIVE_2 = 'bcdef';
+			var TRUE_POSITIVE_1 = 'cdefg';
+			var TRUE_POSITIVE_2 = 'defgh';
+			var NEGATIVE_1 = 'efghi';
+			var NEGATIVE_2 = 'fghij';
 
-			bloomFiltersAnalysis.analyze();
+			before(function () {
+				randomWordGenerator.generate
+					.onCall(0).returns(FALSE_POSITIVE_1)
+					.onCall(1).returns(TRUE_POSITIVE_1)
+					.onCall(2).returns(NEGATIVE_1)
+					.onCall(3).returns(NEGATIVE_2)
+					.onCall(4).returns(TRUE_POSITIVE_2)
+					.onCall(5).returns(FALSE_POSITIVE_2);
 
-			sinon.assert.neverCalledWith(console.log, 'abcde');
-		});
+				bloomFilters.lookup.withArgs(FALSE_POSITIVE_1).returns(true);
+				binaryDictionary.lookup.withArgs(FALSE_POSITIVE_1).returns(false);
 
-		it('should not log negative', function() {
-			bloomFilters.lookup.withArgs('abcde').returns(false);
-			binaryDictionary.lookup.withArgs('abcde').returns(false);
+				bloomFilters.lookup.withArgs(FALSE_POSITIVE_2).returns(true);
+				binaryDictionary.lookup.withArgs(FALSE_POSITIVE_2).returns(false);
 
-			bloomFiltersAnalysis.analyze();
-			
-			sinon.assert.neverCalledWith(console.log, 'abcde');
+				bloomFilters.lookup.withArgs(TRUE_POSITIVE_1).returns(true);
+				binaryDictionary.lookup.withArgs(TRUE_POSITIVE_1).returns(true);
+
+				bloomFilters.lookup.withArgs(TRUE_POSITIVE_2).returns(true);
+				binaryDictionary.lookup.withArgs(TRUE_POSITIVE_2).returns(true);
+
+				bloomFilters.lookup.withArgs(NEGATIVE_1).returns(false);
+				bloomFilters.lookup.withArgs(NEGATIVE_2).returns(false);
+
+				bloomFiltersAnalysis.analyze();
+			});
+
+			it('logs false positives', function() {
+				sinon.assert.calledWith(console.log, FALSE_POSITIVE_1);
+				sinon.assert.calledWith(console.log, FALSE_POSITIVE_2);
+			});
+
+			it('does not log true positives', function() {
+				sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_1);
+				sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_2);
+			});
+
+			it('does not log negatives', function() {
+				sinon.assert.neverCalledWith(console.log, NEGATIVE_1);
+				sinon.assert.neverCalledWith(console.log, NEGATIVE_2);
+			});
 		});
 	});
 });
