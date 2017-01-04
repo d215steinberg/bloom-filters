@@ -47,7 +47,7 @@ describe('Bloom Filters Analysis', function () {
 				bloomFilters.lookup.withArgs('abcde').returns(true);
 				binaryDictionary.lookup.withArgs('abcde').returns(false);
 
-				bloomFiltersAnalysis.analyze();
+				bloomFiltersAnalysis.analyze(1);
 
 				sinon.assert.calledWith(console.log, 'abcde');
 			});
@@ -56,7 +56,7 @@ describe('Bloom Filters Analysis', function () {
 				bloomFilters.lookup.withArgs('abcde').returns(true);
 				binaryDictionary.lookup.withArgs('abcde').returns(true);
 
-				bloomFiltersAnalysis.analyze();
+				bloomFiltersAnalysis.analyze(1);
 
 				sinon.assert.neverCalledWith(console.log, 'abcde');
 			});
@@ -65,7 +65,7 @@ describe('Bloom Filters Analysis', function () {
 				bloomFilters.lookup.withArgs('abcde').returns(false);
 				binaryDictionary.lookup.withArgs('abcde').returns(false);
 
-				bloomFiltersAnalysis.analyze();
+				bloomFiltersAnalysis.analyze(1);
 
 				sinon.assert.neverCalledWith(console.log, 'abcde');
 			});
@@ -103,7 +103,7 @@ describe('Bloom Filters Analysis', function () {
 				bloomFilters.lookup.withArgs(NEGATIVE_1).returns(false);
 				bloomFilters.lookup.withArgs(NEGATIVE_2).returns(false);
 
-				bloomFiltersAnalysis.analyze();
+				bloomFiltersAnalysis.analyze(6);
 			});
 
 			it('logs false positives', function() {
