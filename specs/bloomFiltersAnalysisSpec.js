@@ -22,8 +22,8 @@ describe('Bloom Filters Analysis', function () {
 		mockery.deregisterMock('request-promise');
 	});
 
-	describe('Analyzing bloom filters', function (done) {
-		it('should log false positive', sinon.test(function (done) {
+	describe('Analyzing bloom filters', function () {
+		it('should log false positive', sinon.test(function () {
 			this.stub(randomWordGenerator, 'generate').returns('abcde');
 			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
 			this.stub(binaryDictionary, 'lookup').withArgs('abcde').returns(false);
