@@ -107,8 +107,8 @@ describe('Bloom Filters Analysis', function () {
 			});
 
 			it('logs false positives', function() {
-				sinon.assert.calledWithMatch(console.log, FALSE_POSITIVE_1);
-				sinon.assert.calledWithMatch(console.log, FALSE_POSITIVE_2);
+				sinon.assert.calledWithMatch(console.log, "False positive: " + FALSE_POSITIVE_1);
+				sinon.assert.calledWithMatch(console.log, "False positive: " + FALSE_POSITIVE_2);
 			});
 
 			it('does not log true positives', function() {
