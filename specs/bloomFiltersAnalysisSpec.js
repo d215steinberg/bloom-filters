@@ -49,7 +49,7 @@ describe('Bloom Filters Analysis', function () {
 
 				bloomFiltersAnalysis.analyze(1);
 
-				sinon.assert.calledWith(console.log, 'abcde');
+				sinon.assert.calledWithMatch(console.log, 'abcde');
 			});
 
 			it('should not log true positive', function () {
@@ -58,7 +58,7 @@ describe('Bloom Filters Analysis', function () {
 
 				bloomFiltersAnalysis.analyze(1);
 
-				sinon.assert.neverCalledWith(console.log, 'abcde');
+				sinon.assert.neverCalledWithMatch(console.log, 'abcde');
 			});
 
 			it('should not log negative', function () {
@@ -67,7 +67,7 @@ describe('Bloom Filters Analysis', function () {
 
 				bloomFiltersAnalysis.analyze(1);
 
-				sinon.assert.neverCalledWith(console.log, 'abcde');
+				sinon.assert.neverCalledWithMatch(console.log, 'abcde');
 			});
 		});
 
@@ -107,18 +107,18 @@ describe('Bloom Filters Analysis', function () {
 			});
 
 			it('logs false positives', function() {
-				sinon.assert.calledWith(console.log, FALSE_POSITIVE_1);
-				sinon.assert.calledWith(console.log, FALSE_POSITIVE_2);
+				sinon.assert.calledWithMatch(console.log, FALSE_POSITIVE_1);
+				sinon.assert.calledWithMatch(console.log, FALSE_POSITIVE_2);
 			});
 
 			it('does not log true positives', function() {
-				sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_1);
-				sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_2);
+				sinon.assert.neverCalledWithMatch(console.log, TRUE_POSITIVE_1);
+				sinon.assert.neverCalledWithMatch(console.log, TRUE_POSITIVE_2);
 			});
 
 			it('does not log negatives', function() {
-				sinon.assert.neverCalledWith(console.log, NEGATIVE_1);
-				sinon.assert.neverCalledWith(console.log, NEGATIVE_2);
+				sinon.assert.neverCalledWithMatch(console.log, NEGATIVE_1);
+				sinon.assert.neverCalledWithMatch(console.log, NEGATIVE_2);
 			});
 		});
 	});
