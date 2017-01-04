@@ -1,27 +1,37 @@
 describe('Bloom Filters Analysis', function () {
 	var expect = require('chai').expect;
 	var sinon = require('sinon');
-	var bloomFilters = require('../bloomFilters');
+	var mockery = require('mockery');
+	var q = require('q');
 	var randomWordGenerator = require('../randomWordGenerator');
 	var binaryDictionary = require('../binaryDictionary');
-	var bloomFiltersAnalysis = require('../bloomFiltersAnalysis');
+	var bloomFilters;
+	var bloomFiltersAnalysis;
+
+	before(function () {
+		mockery.enable();
+		mockery.warnOnUnregistered(false);
+		mockery.registerMock('request-promise', function () {
+			return q('foo\nbar\nbaz');
+		});
+		bloomFilters = require('../bloomFilters');
+		bloomFiltersAnalysis = require('../bloomFiltersAnalysis');
+	});
+
+	after(function() {
+		mockery.deregisterMock('request-promise');
+	});
 
 	describe('Analyzing bloom filters', function (done) {
-		beforeEach(function () {
-			var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
-			bloomFilters.loadDictionary(WORD_LIST_URL)
-				.then(done)
-		});
+		it('should log false positive', sinon.test(function (done) {
+			this.stub(randomWordGenerator, 'generate').returns('abcde');
+			this.stub(bloomFilters, 'lookup').withArgs('abcde').returns(true);
+			this.stub(binaryDictionary, 'lookup').withArgs('abcde').returns(false);
+			sinon.spy(console, 'log');
 
-		it('should log false positive', function (done) {
-			sinon.stub(randomWordGenerator, 'generate').return('abcde');
-			bloomFilters.lookup('abcde').return(true);
-			binaryDictionary.lookup('abcde').return(false);
-			spyOn(console, 'log');
+			bloomFiltersAnalysis.analyze();
 
-			bloomFilterAnalysis.analyze();
-
-			expect(console.log).toHaveBeenCalledWith('abcde');
-		});
+			sinon.assert.calledWith(console.log, 'abcde');
+		}));
 	});
 });

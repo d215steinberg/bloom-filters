@@ -1,3 +1,4 @@
-/**
- * Created by fbp812 on 1/4/2017.
- */
+(function () {
+	module.exports.generate = function() {
+	};
+})();
