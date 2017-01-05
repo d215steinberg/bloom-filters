@@ -83,21 +83,27 @@ describe('Bloom Filters Analysis', function () {
 			var NEGATIVE_1 = 'efghi';
 			var NEGATIVE_2 = 'fghij';
 
+			function defineFalsePositive(word) {
+				bloomFilters.lookup.withArgs(word).returns(true);
+				binaryDictionary.lookup.withArgs(word).returns(false);
+			}
+
+			function defineTruePositive(word) {
+				bloomFilters.lookup.withArgs(word).returns(true);
+				binaryDictionary.lookup.withArgs(word).returns(true);
+			}
+
+			function defineNegative(word) {
+				bloomFilters.lookup.withArgs(word).returns(false);
+			}
+
 			before(function () {
-				bloomFilters.lookup.withArgs(FALSE_POSITIVE_1).returns(true);
-				binaryDictionary.lookup.withArgs(FALSE_POSITIVE_1).returns(false);
-
-				bloomFilters.lookup.withArgs(FALSE_POSITIVE_2).returns(true);
-				binaryDictionary.lookup.withArgs(FALSE_POSITIVE_2).returns(false);
-
-				bloomFilters.lookup.withArgs(TRUE_POSITIVE_1).returns(true);
-				binaryDictionary.lookup.withArgs(TRUE_POSITIVE_1).returns(true);
-
-				bloomFilters.lookup.withArgs(TRUE_POSITIVE_2).returns(true);
-				binaryDictionary.lookup.withArgs(TRUE_POSITIVE_2).returns(true);
-
-				bloomFilters.lookup.withArgs(NEGATIVE_1).returns(false);
-				bloomFilters.lookup.withArgs(NEGATIVE_2).returns(false);
+				defineFalsePositive(FALSE_POSITIVE_1);
+				defineFalsePositive(FALSE_POSITIVE_2);
+				defineTruePositive(TRUE_POSITIVE_1);
+				defineTruePositive(TRUE_POSITIVE_2);
+				defineNegative(NEGATIVE_1);
+				defineNegative(NEGATIVE_2);
 			});
 
 			function defineRandomWords(words) {
