@@ -34,13 +34,18 @@ describe('Bloom Filters Analysis', function () {
 			bloomFilters.lookup.restore();
 		});
 
-		afterEach(function () {
-			console.log.reset();
-		});
 
 		describe('Single word', function () {
 			before(function () {
 				randomWordGenerator.generate.returns('abcde');
+			});
+
+			after(function () {
+				randomWordGenerator.generate.reset();
+			});
+
+			afterEach(function () {
+				console.log.reset();
 			});
 
 			it('should log false positive', function () {
@@ -71,7 +76,7 @@ describe('Bloom Filters Analysis', function () {
 			});
 		});
 
-		describe('Multiple words', function () {
+		describe.only('Multiple words', function () {
 			var FALSE_POSITIVE_1 = 'abcde';
 			var FALSE_POSITIVE_2 = 'bcdef';
 			var TRUE_POSITIVE_1 = 'cdefg';
@@ -106,22 +111,22 @@ describe('Bloom Filters Analysis', function () {
 				bloomFiltersAnalysis.analyze(6);
 			});
 
-			it('logs false positives', function() {
+			it('logs false positives', function () {
 				sinon.assert.calledWithMatch(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_1);
 				sinon.assert.calledWithMatch(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_2);
 			});
 
-			it('does not log true positives', function() {
+			it('does not log true positives', function () {
 				sinon.assert.neverCalledWithMatch(console.log, TRUE_POSITIVE_1);
 				sinon.assert.neverCalledWithMatch(console.log, TRUE_POSITIVE_2);
 			});
 
-			it('does not log negatives', function() {
+			it('does not log negatives', function () {
 				sinon.assert.neverCalledWithMatch(console.log, NEGATIVE_1);
 				sinon.assert.neverCalledWithMatch(console.log, NEGATIVE_2);
 			});
 
-			it('should log number of false positives', function() {
+			it('should log number of false positives', function () {
 				sinon.assert.calledWithMatch(console.log, "Number of false positives: " + 2);
 			});
 		});
