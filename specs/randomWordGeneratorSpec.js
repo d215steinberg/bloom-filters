@@ -11,6 +11,7 @@ describe('Random Word Generator', function() {
 			.onCall(2).returns('m')
 			.onCall(3).returns('e')
 			.onCall(4).returns('o');
+		
 		expect(randomWordGenerator.generate()).to.equal('azmeo');
 	});
 });
