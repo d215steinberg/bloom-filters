@@ -18,5 +18,8 @@
 			});
 	};
 
-	module.exports.lookup = function() {};
+	module.exports.lookup = function(word) {
+		var middlePosition = Math.floor(words.length / 2);
+		return words[middlePosition] === word;
+	};
 })();
