@@ -5,23 +5,24 @@ describe('Binary Dictionary', function () {
 	var q = require('q');
 	var rp;
 	var binaryDictionary;
+	var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
 
 	before(function () {
 		mockery.enable();
 		mockery.warnOnUnregistered(false);
 		mockery.registerMock('request-promise', function () {
-			return q('foo\nbar\nbaz');
+			return q('word1\nword2\nword3\nword4\n\word5');
 		});
 		rp = require('request-promise');
 		binaryDictionary = require('../binaryDictionary');
 	});
 
 	describe('Loading binary dictionary from web', function () {
-		var WORD_LIST_URL = 'http://codekata.com/data/wordlist.txt';
+
 		it('should load all words into array', function (done) {
 			binaryDictionary.loadDictionary(WORD_LIST_URL)
 				.then(function () {
-					expect(binaryDictionary.getWords()).to.equal(['foo', 'bar', 'baz']);
+					expect(binaryDictionary.getWords()).to.eql(['word1', 'word2', 'word3', 'word4', 'word5']);
 					done();
 				})
 				.catch(function (err) {
@@ -30,26 +31,17 @@ describe('Binary Dictionary', function () {
 		});
 	});
 
-	xdescribe('Looking up word', function () {
-		beforeEach(function () {
-			var MISS_HASH = 42;
-			defineHashValues('nearMiss', FOO_HASH_3, MISS_HASH, BAR_HASH_2);
-			bitArray.setBit(FOO_HASH_1);
-			bitArray.setBit(FOO_HASH_2);
-			bitArray.setBit(FOO_HASH_3);
-			bitArray.setBit(BAR_HASH_1);
-			bitArray.setBit(BAR_HASH_2);
-			bitArray.setBit(BAR_HASH_3);
-			bitArray.setBit(BAZ_HASH_1);
-			bitArray.setBit(BAZ_HASH_2);
-			bitArray.setBit(BAZ_HASH_3);
+	describe('Looking up word', function () {
+		beforeEach(function (done) {
+			binaryDictionary.loadDictionary(WORD_LIST_URL)
+				.then(done);
 		});
 
-		it('should not recognize a word for which one of multiple hashes is a miss', function () {
-			expect(binaryDictionary.lookup('nearMiss')).to.be.false;
+		it('should find word in middle of list', function () {
+			expect(binaryDictionary.lookup('word3')).to.be.true;
 		});
 
-		it('should recognize a word for which all hashes are hits', function () {
+		xit('should recognize a word for which all hashes are hits', function () {
 			expect(binaryDictionary.lookup('foo')).to.be.true;
 			expect(binaryDictionary.lookup('bar')).to.be.true;
 			expect(binaryDictionary.lookup('baz')).to.be.true;

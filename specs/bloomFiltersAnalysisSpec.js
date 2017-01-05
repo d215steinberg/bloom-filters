@@ -4,7 +4,7 @@ describe('Bloom Filters Analysis', function () {
 	var mockery = require('mockery');
 	var q = require('q');
 	var randomWordGenerator = require('../randomWordGenerator');
-	var binaryDictionary = require('../binaryDictionary');
+	var binaryDictionary;
 	var bloomFilters;
 	var bloomFiltersAnalysis;
 
@@ -16,6 +16,7 @@ describe('Bloom Filters Analysis', function () {
 		});
 
 		bloomFilters = require('../bloomFilters');
+		binaryDictionary = require('../binaryDictionary');
 		bloomFiltersAnalysis = require('../bloomFiltersAnalysis');
 
 		sinon.stub(randomWordGenerator, 'generate');
