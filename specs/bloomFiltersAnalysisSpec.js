@@ -75,7 +75,7 @@ describe('Bloom Filters Analysis', function () {
 			});
 		});
 
-		describe.only('Multiple words', function () {
+		describe('Multiple words', function () {
 			var FALSE_POSITIVE_1 = 'abcde';
 			var FALSE_POSITIVE_2 = 'bcdef';
 			var TRUE_POSITIVE_1 = 'cdefg';
@@ -84,14 +84,6 @@ describe('Bloom Filters Analysis', function () {
 			var NEGATIVE_2 = 'fghij';
 
 			before(function () {
-				randomWordGenerator.generate
-					.onCall(0).returns(FALSE_POSITIVE_1)
-					.onCall(1).returns(TRUE_POSITIVE_1)
-					.onCall(2).returns(NEGATIVE_1)
-					.onCall(3).returns(NEGATIVE_2)
-					.onCall(4).returns(TRUE_POSITIVE_2)
-					.onCall(5).returns(FALSE_POSITIVE_2);
-
 				bloomFilters.lookup.withArgs(FALSE_POSITIVE_1).returns(true);
 				binaryDictionary.lookup.withArgs(FALSE_POSITIVE_1).returns(false);
 
@@ -106,31 +98,53 @@ describe('Bloom Filters Analysis', function () {
 
 				bloomFilters.lookup.withArgs(NEGATIVE_1).returns(false);
 				bloomFilters.lookup.withArgs(NEGATIVE_2).returns(false);
-
-				bloomFiltersAnalysis.analyze(6);
 			});
 
-			it('logs false positives', function () {
-				sinon.assert.calledWith(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_1);
-				sinon.assert.calledWith(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_2);
+			function defineRandomWords(words) {
+				randomWordGenerator.generate
+					.onCall(0).returns(words[0])
+					.onCall(1).returns(words[1])
+					.onCall(2).returns(words[2])
+					.onCall(3).returns(words[3])
+					.onCall(4).returns(words[4])
+					.onCall(5).returns(words[5]);
+			}
+
+			describe('Logging false positives', function () {
+				before(function () {
+					defineRandomWords([FALSE_POSITIVE_1, FALSE_POSITIVE_2, NEGATIVE_1, NEGATIVE_2, TRUE_POSITIVE_1, TRUE_POSITIVE_2]);
+				});
+
+				beforeEach(function() {
+					bloomFiltersAnalysis.analyze(6);
+				});
+
+				it('logs false positives', function () {
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_1);
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_2);
+				});
+
+				it('does not log true positives', function () {
+					sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_1);
+					sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_2);
+				});
+
+				it('does not log negatives', function () {
+					sinon.assert.neverCalledWith(console.log, NEGATIVE_1);
+					sinon.assert.neverCalledWith(console.log, NEGATIVE_2);
+				});
+
+				it('should log number of false positives', function () {
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.NUMBER_OF_FALSE_POSITIVES_LABEL + 2);
+				});
 			});
 
-			it('does not log true positives', function () {
-				sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_1);
-				sinon.assert.neverCalledWith(console.log, TRUE_POSITIVE_2);
-			});
-
-			it('does not log negatives', function () {
-				sinon.assert.neverCalledWith(console.log, NEGATIVE_1);
-				sinon.assert.neverCalledWith(console.log, NEGATIVE_2);
-			});
-
-			it('should log number of false positives', function () {
-				sinon.assert.calledWith(console.log, bloomFiltersAnalysis.NUMBER_OF_FALSE_POSITIVES_LABEL + 2);
-			});
-
-			it('should log percentage of false positives', function() {
-				sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "50%");
+			describe('Logging percentage of false positives', function() {
+				it('should log integer percentage', function() {
+					defineRandomWords([FALSE_POSITIVE_1, FALSE_POSITIVE_2, NEGATIVE_1, NEGATIVE_2, TRUE_POSITIVE_1, TRUE_POSITIVE_2]);
+					bloomFiltersAnalysis.analyze(6);
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "50%");
+				});
 			});
 		});
 	});
