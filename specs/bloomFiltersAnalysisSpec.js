@@ -130,7 +130,7 @@ describe('Bloom Filters Analysis', function () {
 			});
 
 			it('should log percentage of false positives', function() {
-				sinon.assert.calledWith(console.log, "Percentage of false positives: 50%");
+				sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "50%");
 			});
 		});
 	});

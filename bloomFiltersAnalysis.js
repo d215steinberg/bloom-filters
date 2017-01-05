@@ -5,6 +5,7 @@
 
 	module.exports.FALSE_POSITIVE_LABEL = "False positive: ";
 	module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL = "Number of false positives: ";
+	module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL = "Percentage of false positives: ";
 
 
 	module.exports.analyze = function (numWords) {
@@ -27,6 +28,6 @@
 		}
 
 		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
-		console.log("Percentage of false positives: " + (falsePositiveCount / positiveCount) * 100 + "%");
+		console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + (falsePositiveCount / positiveCount) * 100 + "%");
 	};
 })();
