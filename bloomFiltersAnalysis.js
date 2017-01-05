@@ -12,14 +12,12 @@
 		var positiveCount = 0;
 		var falsePositiveCount = 0;
 
-		function logFalsePositive(word) {
-			if (bloomFilters.lookup(word)) {
-				positiveCount++;
-				if (!binaryDictionary.lookup(word)) {
-					console.log(module.exports.FALSE_POSITIVE_LABEL + word);
-					falsePositiveCount++;
-				}
-			}
+		function isPositive(word) {
+			return bloomFilters.lookup(word);
+		}
+
+		function isFalsePositive(word) {
+			return !binaryDictionary.lookup(word);
 		}
 
 		function getFalsePositivePercentage() {
@@ -29,12 +27,36 @@
 			return Math.round((falsePositiveCount / positiveCount) * 100) + "%";
 		}
 
-		for (var i = 0; i < numWords; i++) {
-			var word = randomWordGenerator.generate();
-			logFalsePositive(word);
+		function logFalsePositive(word) {
+			console.log(module.exports.FALSE_POSITIVE_LABEL + word);
 		}
 
-		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
-		console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + getFalsePositivePercentage());
+		function logFalsePositiveCount() {
+			console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
+		}
+
+		function logFalsePositivePercentage() {
+			console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + getFalsePositivePercentage());
+		}
+
+		function analyzePositive(word) {
+			positiveCount++;
+			if (isFalsePositive(word)) {
+				logFalsePositive(word);
+				falsePositiveCount++;
+			}
+		}
+
+		function analyzeWord(word) {
+			if (isPositive(word)) {
+				analyzePositive(word);
+			}
+		}
+
+		for (var i = 0; i < numWords; i++) {
+			analyzeWord(randomWordGenerator.generate());
+		}
+		logFalsePositiveCount();
+		logFalsePositivePercentage();
 	};
 })();
