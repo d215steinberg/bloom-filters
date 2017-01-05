@@ -21,7 +21,7 @@
 	function lookup(wordList, word) {
 		var middlePosition = Math.floor(wordList.length / 2);
 		return wordList[middlePosition] === word
-			|| lookup(wordList.slice(0, middlePosition));
+			|| lookup(wordList.slice(0, middlePosition), word);
 	}
 
 	module.exports.lookup = function(word) {

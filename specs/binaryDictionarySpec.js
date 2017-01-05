@@ -44,5 +44,13 @@ describe('Binary Dictionary', function () {
 		it('should find a word in first part of list', function () {
 			expect(binaryDictionary.lookup('word2')).to.be.true;
 		});
+
+		it('should not find a word that precedes list', function() {
+			expect(binaryDictionary.lookup('word0')).to.be.false;
+		});
+
+		xit('should find a word in latter part of list', function () {
+			expect(binaryDictionary.lookup('word4')).to.be.true;
+		});
 	});
 });
