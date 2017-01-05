@@ -8,10 +8,12 @@
 
 
 	module.exports.analyze = function (numWords) {
+		var positiveCount = 0;
 		var falsePositiveCount = 0;
 
 		function logFalsePositive(word) {
 			if (bloomFilters.lookup(word)) {
+				positiveCount++;
 				if (!binaryDictionary.lookup(word)) {
 					console.log(module.exports.FALSE_POSITIVE_LABEL + word);
 					falsePositiveCount++;
@@ -25,5 +27,6 @@
 		}
 
 		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
+		console.log("Percentage of false positives: " + (falsePositiveCount / positiveCount) * 100 + "%");
 	};
 })();
