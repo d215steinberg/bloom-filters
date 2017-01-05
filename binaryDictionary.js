@@ -18,8 +18,13 @@
 			});
 	};
 
+	function lookup(wordList, word) {
+		var middlePosition = Math.floor(wordList.length / 2);
+		return wordList[middlePosition] === word
+			|| lookup(wordList.slice(0, middlePosition));
+	}
+
 	module.exports.lookup = function(word) {
-		var middlePosition = Math.floor(words.length / 2);
-		return words[middlePosition] === word;
+		return lookup(words, word);
 	};
 })();
