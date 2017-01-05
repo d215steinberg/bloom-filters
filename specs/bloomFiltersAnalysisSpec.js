@@ -120,6 +120,10 @@ describe('Bloom Filters Analysis', function () {
 				sinon.assert.neverCalledWithMatch(console.log, NEGATIVE_1);
 				sinon.assert.neverCalledWithMatch(console.log, NEGATIVE_2);
 			});
+
+			it('should log number of false positives', function() {
+				sinon.assert.calledWithMatch(console.log, "Number of false positives: " + 2);
+			});
 		});
 	});
 });
