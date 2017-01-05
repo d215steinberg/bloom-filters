@@ -169,6 +169,12 @@ describe('Bloom Filters Analysis', function () {
 					bloomFiltersAnalysis.analyze(2);
 					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "0%");
 				});
+
+				it('should log percentage as N/A when no positives', function() {
+					defineRandomWords([NEGATIVE_1, NEGATIVE_2]);
+					bloomFiltersAnalysis.analyze(2);
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "N/A");
+				});
 			});
 		});
 	});
