@@ -156,7 +156,13 @@ describe('Bloom Filters Analysis', function () {
 					defineRandomWords([FALSE_POSITIVE_1, TRUE_POSITIVE_1, TRUE_POSITIVE_2]);
 					bloomFiltersAnalysis.analyze(3);
 					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "33%");
-				})
+				});
+
+				it('should round percentage up to integer', function () {
+					defineRandomWords([FALSE_POSITIVE_1, TRUE_POSITIVE_1, FALSE_POSITIVE_2]);
+					bloomFiltersAnalysis.analyze(3);
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "67%");
+				});
 			});
 		});
 	});
