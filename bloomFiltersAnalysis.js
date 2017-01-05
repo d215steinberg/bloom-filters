@@ -23,7 +23,11 @@
 		}
 
 		function getFalsePositivePercentage() {
-			return Math.round((falsePositiveCount / positiveCount) * 100) + "%";
+			var percentage = (falsePositiveCount / positiveCount) * 100;
+			if (isNaN(percentage)) {
+				return "N/A";
+			}
+			return Math.round(percentage) + "%";
 		}
 
 		for (var i = 0; i < numWords; i++) {
@@ -32,7 +36,6 @@
 		}
 
 		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
-
 		console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + getFalsePositivePercentage());
 	};
 })();
