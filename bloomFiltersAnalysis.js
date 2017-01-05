@@ -4,6 +4,7 @@
 	var bloomFilters = require('./bloomFilters');
 
 	module.exports.FALSE_POSITIVE_LABEL = "False positive: ";
+	module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL = "Number of false positives: ";
 
 
 	module.exports.analyze = function (numWords) {
@@ -23,6 +24,6 @@
 			logFalsePositive(word);
 		}
 
-		console.log("Number of false positives: " + falsePositiveCount + '\n');
+		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount + '\n');
 	};
 })();

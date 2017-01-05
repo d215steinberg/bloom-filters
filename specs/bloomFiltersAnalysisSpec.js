@@ -34,7 +34,6 @@ describe('Bloom Filters Analysis', function () {
 			bloomFilters.lookup.restore();
 		});
 
-
 		describe('Single word', function () {
 			before(function () {
 				randomWordGenerator.generate.returns('abcde');
@@ -127,7 +126,7 @@ describe('Bloom Filters Analysis', function () {
 			});
 
 			it('should log number of false positives', function () {
-				sinon.assert.calledWithMatch(console.log, "Number of false positives: " + 2);
+				sinon.assert.calledWithMatch(console.log, bloomFiltersAnalysis.NUMBER_OF_FALSE_POSITIVES_LABEL + 2);
 			});
 		});
 	});
