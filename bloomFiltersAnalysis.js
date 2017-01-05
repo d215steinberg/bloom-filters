@@ -13,7 +13,7 @@
 		function logFalsePositive(word) {
 			if (bloomFilters.lookup(word)) {
 				if (!binaryDictionary.lookup(word)) {
-					console.log(module.exports.FALSE_POSITIVE_LABEL + word + '\n');
+					console.log(module.exports.FALSE_POSITIVE_LABEL + word);
 					falsePositiveCount++;
 				}
 			}
@@ -24,6 +24,6 @@
 			logFalsePositive(word);
 		}
 
-		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount + '\n');
+		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
 	};
 })();
