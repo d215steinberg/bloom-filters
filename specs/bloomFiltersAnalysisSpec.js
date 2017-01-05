@@ -36,19 +36,12 @@ describe('Bloom Filters Analysis', function () {
 
 		afterEach(function () {
 			randomWordGenerator.generate.reset();
+			console.log.reset();
 		});
 
 		describe('Single word', function () {
-			before(function () {
+			beforeEach(function () {
 				randomWordGenerator.generate.returns('abcde');
-			});
-
-			after(function () {
-				// randomWordGenerator.generate.reset();
-			});
-
-			afterEach(function () {
-				console.log.reset();
 			});
 
 			it('should log false positive', function () {
@@ -79,7 +72,7 @@ describe('Bloom Filters Analysis', function () {
 			});
 		});
 
-		describe.only('Multiple words', function () {
+		describe('Multiple words', function () {
 			var FALSE_POSITIVE_1 = 'abcde';
 			var FALSE_POSITIVE_2 = 'bcdef';
 			var TRUE_POSITIVE_1 = 'cdefg';
@@ -170,7 +163,7 @@ describe('Bloom Filters Analysis', function () {
 					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "0%");
 				});
 
-				it('should log percentage as N/A when no positives', function() {
+				it('should log percentage as N/A when no positives', function () {
 					defineRandomWords([NEGATIVE_1, NEGATIVE_2]);
 					bloomFiltersAnalysis.analyze(2);
 					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "N/A");
