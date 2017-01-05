@@ -12,4 +12,9 @@ describe('Random lower case letter generator', function() {
 		_.random.withArgs(97, 122).returns(97);
 		expect(randomLowerCaseLetterGenerator.generate()).to.equal('a');
 	});
+
+	it("should generate 'z' as highest value", function() {
+		_.random.withArgs(97, 122).returns(122);
+		expect(randomLowerCaseLetterGenerator.generate()).to.equal('z');
+	});
 });
