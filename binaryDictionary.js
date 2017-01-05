@@ -19,6 +19,10 @@
 	};
 
 	function lookup(wordList, word) {
+		if (wordList.length === 0) {
+			return false;
+		}
+
 		var middlePosition = Math.floor(wordList.length / 2);
 		return wordList[middlePosition] === word
 			|| lookup(wordList.slice(0, middlePosition), word);
