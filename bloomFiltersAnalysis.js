@@ -23,11 +23,10 @@
 		}
 
 		function getFalsePositivePercentage() {
-			var percentage = (falsePositiveCount / positiveCount) * 100;
-			if (isNaN(percentage)) {
+			if (positiveCount === 0) {
 				return "N/A";
 			}
-			return Math.round(percentage) + "%";
+			return Math.round((falsePositiveCount / positiveCount) * 100) + "%";
 		}
 
 		for (var i = 0; i < numWords; i++) {
