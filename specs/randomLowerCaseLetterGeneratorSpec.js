@@ -9,12 +9,14 @@ describe('Random lower case letter generator', function() {
 	});
 
 	it("should generate 'a' as lowest value", function() {
-		_.random.withArgs(97, 122).returns(97);
+		_.random.withArgs(randomLowerCaseLetterGenerator.ASCII_FOR_LOWERCASE_A, randomLowerCaseLetterGenerator.ASCII_FOR_LOWERCASE_Z)
+			.returns(randomLowerCaseLetterGenerator.ASCII_FOR_LOWERCASE_A);
 		expect(randomLowerCaseLetterGenerator.generate()).to.equal('a');
 	});
 
 	it("should generate 'z' as highest value", function() {
-		_.random.withArgs(97, 122).returns(122);
+		_.random.withArgs(randomLowerCaseLetterGenerator.ASCII_FOR_LOWERCASE_A, randomLowerCaseLetterGenerator.ASCII_FOR_LOWERCASE_Z)
+			.returns(randomLowerCaseLetterGenerator.ASCII_FOR_LOWERCASE_Z);
 		expect(randomLowerCaseLetterGenerator.generate()).to.equal('z');
 	});
 
