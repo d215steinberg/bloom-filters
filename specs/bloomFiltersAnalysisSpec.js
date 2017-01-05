@@ -34,13 +34,17 @@ describe('Bloom Filters Analysis', function () {
 			bloomFilters.lookup.restore();
 		});
 
+		afterEach(function () {
+			randomWordGenerator.generate.reset();
+		});
+
 		describe('Single word', function () {
 			before(function () {
 				randomWordGenerator.generate.returns('abcde');
 			});
 
 			after(function () {
-				randomWordGenerator.generate.reset();
+				// randomWordGenerator.generate.reset();
 			});
 
 			afterEach(function () {
@@ -75,7 +79,7 @@ describe('Bloom Filters Analysis', function () {
 			});
 		});
 
-		describe('Multiple words', function () {
+		describe.only('Multiple words', function () {
 			var FALSE_POSITIVE_1 = 'abcde';
 			var FALSE_POSITIVE_2 = 'bcdef';
 			var TRUE_POSITIVE_1 = 'cdefg';
@@ -97,6 +101,12 @@ describe('Bloom Filters Analysis', function () {
 				bloomFilters.lookup.withArgs(word).returns(false);
 			}
 
+			function defineRandomWords(words) {
+				for (var i = 0; i < words.length; i++) {
+					randomWordGenerator.generate.onCall(i).returns(words[i]);
+				}
+			}
+
 			before(function () {
 				defineFalsePositive(FALSE_POSITIVE_1);
 				defineFalsePositive(FALSE_POSITIVE_2);
@@ -106,22 +116,12 @@ describe('Bloom Filters Analysis', function () {
 				defineNegative(NEGATIVE_2);
 			});
 
-			function defineRandomWords(words) {
-				randomWordGenerator.generate
-					.onCall(0).returns(words[0])
-					.onCall(1).returns(words[1])
-					.onCall(2).returns(words[2])
-					.onCall(3).returns(words[3])
-					.onCall(4).returns(words[4])
-					.onCall(5).returns(words[5]);
-			}
-
 			describe('Logging false positives', function () {
 				before(function () {
 					defineRandomWords([FALSE_POSITIVE_1, FALSE_POSITIVE_2, NEGATIVE_1, NEGATIVE_2, TRUE_POSITIVE_1, TRUE_POSITIVE_2]);
 				});
 
-				beforeEach(function() {
+				beforeEach(function () {
 					bloomFiltersAnalysis.analyze(6);
 				});
 
@@ -145,12 +145,18 @@ describe('Bloom Filters Analysis', function () {
 				});
 			});
 
-			describe('Logging percentage of false positives', function() {
-				it('should log integer percentage', function() {
+			describe('Logging percentage of false positives', function () {
+				it('should log integer percentage', function () {
 					defineRandomWords([FALSE_POSITIVE_1, FALSE_POSITIVE_2, NEGATIVE_1, NEGATIVE_2, TRUE_POSITIVE_1, TRUE_POSITIVE_2]);
 					bloomFiltersAnalysis.analyze(6);
 					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "50%");
 				});
+
+				it('should round percentage down to integer', function () {
+					defineRandomWords([FALSE_POSITIVE_1, TRUE_POSITIVE_1, TRUE_POSITIVE_2]);
+					bloomFiltersAnalysis.analyze(3);
+					sinon.assert.calledWith(console.log, bloomFiltersAnalysis.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + "33%");
+				})
 			});
 		});
 	});
