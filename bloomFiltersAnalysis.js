@@ -22,12 +22,17 @@
 			}
 		}
 
+		function getFalsePositivePercentage() {
+			return Math.round((falsePositiveCount / positiveCount) * 100) + "%";
+		}
+
 		for (var i = 0; i < numWords; i++) {
 			var word = randomWordGenerator.generate();
 			logFalsePositive(word);
 		}
 
 		console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
-		console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + (falsePositiveCount / positiveCount) * 100 + "%");
+
+		console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + getFalsePositivePercentage());
 	};
 })();
