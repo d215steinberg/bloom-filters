@@ -41,10 +41,8 @@ describe('Binary Dictionary', function () {
 			expect(binaryDictionary.lookup('word3')).to.be.true;
 		});
 
-		xit('should recognize a word for which all hashes are hits', function () {
-			expect(binaryDictionary.lookup('foo')).to.be.true;
-			expect(binaryDictionary.lookup('bar')).to.be.true;
-			expect(binaryDictionary.lookup('baz')).to.be.true;
+		it('should find a word in first part of list', function () {
+			expect(binaryDictionary.lookup('word2')).to.be.true;
 		});
 	});
 });
