@@ -17,4 +17,9 @@ describe('Random lower case letter generator', function() {
 		_.random.withArgs(97, 122).returns(122);
 		expect(randomLowerCaseLetterGenerator.generate()).to.equal('z');
 	});
+
+	it("should generate letter between 'a' and 'z'", function() {
+		_.random.restore();
+		expect(randomLowerCaseLetterGenerator.generate()).to.be.within('a', 'z');
+	});
 });
