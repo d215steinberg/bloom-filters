@@ -27,6 +27,7 @@ describe('Bloom Filters Analysis', function () {
 	after(function () {
 		mockery.deregisterMock('request-promise');
 		bloomFilters.lookup.restore();
+		randomWordGenerator.generate.restore();
 	});
 
 	afterEach(function () {
