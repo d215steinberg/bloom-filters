@@ -49,7 +49,7 @@ describe('Bloom Filters Analysis', function () {
 
 				bloomFiltersAnalysis.analyze(1);
 
-				sinon.assert.calledWithMatch(console.log, 'abcde');
+				sinon.assert.calledWithMatch(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + 'abcde');
 			});
 
 			it('should not log true positive', function () {
@@ -107,8 +107,8 @@ describe('Bloom Filters Analysis', function () {
 			});
 
 			it('logs false positives', function() {
-				sinon.assert.calledWithMatch(console.log, "False positive: " + FALSE_POSITIVE_1);
-				sinon.assert.calledWithMatch(console.log, "False positive: " + FALSE_POSITIVE_2);
+				sinon.assert.calledWithMatch(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_1);
+				sinon.assert.calledWithMatch(console.log, bloomFiltersAnalysis.FALSE_POSITIVE_LABEL + FALSE_POSITIVE_2);
 			});
 
 			it('does not log true positives', function() {

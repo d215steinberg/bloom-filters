@@ -3,10 +3,12 @@
 	var binaryDictionary = require('./binaryDictionary');
 	var bloomFilters = require('./bloomFilters');
 
+	module.exports.FALSE_POSITIVE_LABEL = "False positive: ";
+
 	function logFalsePositive(word) {
 		if (bloomFilters.lookup(word)) {
 			if (!binaryDictionary.lookup(word)) {
-				console.log("False positive: " + word + '\n');
+				console.log(module.exports.FALSE_POSITIVE_LABEL + word + '\n');
 			}
 		}
 	}
