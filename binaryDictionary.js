@@ -19,17 +19,19 @@
 	};
 
 	function lookup(wordList, word) {
-		if (wordList.length === 0) {
+		var numWords = wordList.length;
+
+		if (numWords === 0) {
 			return false;
 		}
-		if (wordList.length === 1) {
+		if (numWords === 1) {
 			return wordList[0] === word;
 		}
 
-		var middlePosition = Math.floor(wordList.length / 2);
+		var middlePosition = Math.floor(numWords / 2);
 		return wordList[middlePosition] === word
 			|| lookup(wordList.slice(0, middlePosition), word)
-			|| lookup(wordList.slice(middlePosition, wordList.length), word);
+			|| lookup(wordList.slice(middlePosition, numWords), word);
 	}
 
 	module.exports.lookup = function (word) {
