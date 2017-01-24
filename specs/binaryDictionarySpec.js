@@ -49,7 +49,7 @@ describe('Binary Dictionary', function () {
 			expect(binaryDictionary.lookup('word0')).to.be.false;
 		});
 
-		xit('should find a word in latter part of list', function () {
+		it('should find a word in latter part of list', function () {
 			expect(binaryDictionary.lookup('word4')).to.be.true;
 		});
 	});
