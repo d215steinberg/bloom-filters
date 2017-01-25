@@ -3,9 +3,9 @@
 	var binaryDictionary = require('./binaryDictionary');
 	var bloomFilters = require('./bloomFilters');
 
-	module.exports.FALSE_POSITIVE_LABEL = "False positive: ";
-	module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL = "Number of false positives: ";
-	module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL = "Percentage of false positives: ";
+	exports.FALSE_POSITIVE_LABEL = "False positive: ";
+	exports.NUMBER_OF_FALSE_POSITIVES_LABEL = "Number of false positives: ";
+	exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL = "Percentage of false positives: ";
 
 
 	module.exports.analyze = function (numWords) {
@@ -28,15 +28,15 @@
 		}
 
 		function logFalsePositive(word) {
-			console.log(module.exports.FALSE_POSITIVE_LABEL + word);
+			console.log(exports.FALSE_POSITIVE_LABEL + word);
 		}
 
 		function logFalsePositiveCount() {
-			console.log(module.exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
+			console.log(exports.NUMBER_OF_FALSE_POSITIVES_LABEL + falsePositiveCount);
 		}
 
 		function logFalsePositivePercentage() {
-			console.log(module.exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + getFalsePositivePercentage());
+			console.log(exports.PERCENTAGE_OF_FALSE_POSITIVES_LABEL + getFalsePositivePercentage());
 		}
 
 		function analyzePositive(word) {
