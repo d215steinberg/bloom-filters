@@ -18,7 +18,6 @@ describe('Binary Dictionary', function () {
 	});
 
 	describe('Loading binary dictionary from web', function () {
-
 		it('should load all words into array', function (done) {
 			binaryDictionary.loadDictionary(WORD_LIST_URL)
 				.then(function () {
