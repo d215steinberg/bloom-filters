@@ -21,6 +21,7 @@
 	function lookup(wordList, word) {
 		var numWords = wordList.length;
 
+		var middlePosition = Math.floor(numWords / 2);
 		if (numWords === 0) {
 			return false;
 		}
@@ -28,10 +29,21 @@
 			return wordList[0] === word;
 		}
 
-		var middlePosition = Math.floor(numWords / 2);
-		return wordList[middlePosition] === word
-			|| lookup(wordList.slice(0, middlePosition), word)
-			|| lookup(wordList.slice(middlePosition, numWords), word);
+		function wordIsInMiddle() {
+			return wordList[middlePosition] === word;
+		}
+
+		function wordIsInFirstHalf() {
+			return lookup(wordList.slice(0, middlePosition), word);
+		}
+
+		function wordIsInSecondHalf() {
+			return lookup(wordList.slice(middlePosition, numWords), word);
+		}
+
+		return wordIsInMiddle()
+			|| wordIsInFirstHalf()
+			|| wordIsInSecondHalf();
 	}
 
 	module.exports.lookup = function (word) {
