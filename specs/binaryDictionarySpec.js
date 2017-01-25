@@ -52,5 +52,17 @@ describe('Binary Dictionary', function () {
 		it('should find a word in latter part of list', function () {
 			expect(binaryDictionary.lookup('word4')).to.be.true;
 		});
+
+		it('should not find a word that follows list', function() {
+			expect(binaryDictionary.lookup('word6')).to.be.false;
+		});
+
+		it('should find a word at start of list', function() {
+			expect(binaryDictionary.lookup('word1')).to.be.true;
+		});
+
+		it('should find a word at end of list', function() {
+			expect(binaryDictionary.lookup('word5')).to.be.true;
+		});
 	});
 });
